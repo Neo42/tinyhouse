@@ -6,6 +6,10 @@
     "outDir": "./build",
     "esModuleInterop": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "src",
+  },
+  "include": [
+    "src"
+  ]
 }
