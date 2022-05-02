@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.6.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^13.5.0",
@@ -10,6 +11,7 @@
     "@types/node": "^16.11.33",
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
+    "graphql": "^15.8.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-scripts": "5.0.1",
@@ -17,10 +19,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "codegen:schema": "apollo client:download-schema --endpoint=http://localhost:9000/api",
+    "codegen:generate": "apollo client:codegen --localSchemaFile=schema.json --includes=src/**/*.tsx --target=typescript"
   },
   "eslintConfig": {
     "extends": [
@@ -40,5 +44,22 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:9000"
+  "proxy": "http://localhost:9000",
+  "overrides": {
+    "@apollographql/graphql-language-service-interface": {
+      "graphql": "$graphql"
+    },
+    "@apollographql/graphql-language-service-parser": {
+      "graphql": "$graphql"
+    },
+    "@apollographql/graphql-language-service-types": {
+      "graphql": "$graphql"
+    },
+    "@apollographql/graphql-language-service-utils": {
+      "graphql": "$graphql"
+    }
+  },
+  "devDependencies": {
+    "apollo": "^2.33.10"
+  }
 }

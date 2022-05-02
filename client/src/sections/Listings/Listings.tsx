@@ -1,7 +1,12 @@
-import {useMutation, useQuery} from 'lib/api'
-import {ListingsData, DeleteListingData, DeleteListingVariables} from './types'
+import {gql, useMutation, useQuery} from '@apollo/client'
+import {Listings as ListingsData} from './__generated__/Listings'
+import {
+  DeleteListing as DeleteListingData,
+  DeleteListingVariables,
+} from './__generated__/DeleteListing'
 
-const LISTINGS = `#graphql
+const LISTINGS = gql`
+  # query naming is required for codegen
   query Listings {
     listings {
       id
@@ -17,12 +22,12 @@ const LISTINGS = `#graphql
   }
 `
 
-const DELETE_LISTING = `#graphql
+const DELETE_LISTING = gql`
   mutation DeleteListing($id: ID!) {
     deleteListing(id: $id) {
       id
     }
-  }  
+  }
 `
 
 interface Props {
@@ -38,7 +43,7 @@ export const Listings = ({title}: Props) => {
   ] = useMutation<DeleteListingData, DeleteListingVariables>(DELETE_LISTING)
 
   const handleDeleteListing = async (id: string) => {
-    await deleteListing({id})
+    await deleteListing({variables: {id}})
     refetch()
   }
 
