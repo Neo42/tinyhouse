@@ -52,6 +52,7 @@ const seed = async () => {
     }
 
     console.log('[seed]: success.')
+    process.exit(1)
   } catch {
     throw new Error('Failed to seed database')
   }
