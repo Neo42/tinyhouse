@@ -1,9 +1,10 @@
-import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client'
-import {Layout} from 'antd'
-import {Viewer} from 'lib/types'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client'
+import {Affix, Layout} from 'antd'
+import {AppHeader} from 'lib/components'
+import {Viewer} from 'lib/types'
 import {Home, Host, Listing, Listings, Login, NotFound, User} from 'sections'
 import 'styles/index.css'
 
@@ -26,6 +27,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <Layout id="app">
+        <Affix offsetTop={0} className="app__affix-header">
+          <AppHeader viewer={viewer} setViewer={setViewer} />
+        </Affix>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/host" element={<Host />} />
