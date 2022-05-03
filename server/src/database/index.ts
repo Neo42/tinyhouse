@@ -1,5 +1,5 @@
 import {MongoClient} from 'mongodb'
-import {Database} from 'lib/types'
+import {Booking, Database, Listing, User} from 'lib/types'
 
 // DON'T CREATE A TEST USER UNTIL WHILE YOU ARE CONNECTING TO THE DATABASE
 // OTHERWISE THE AUTH WILL FAIL
@@ -13,6 +13,8 @@ export const connectDatabase = async (): Promise<Database> => {
   const db = client.db('main')
 
   return {
-    listings: db.collection('test_listings'),
+    bookings: db.collection<Booking>('bookings'),
+    listings: db.collection<Listing>('listings'),
+    users: db.collection<User>('users'),
   }
 }

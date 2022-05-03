@@ -7,7 +7,8 @@
     "start": "nodemon src/index.ts",
     "build": "tsc -p ./",
     "prepare": "husky install",
-    "seed": "ts-node temp/seed.ts"
+    "seed": "ts-node temp/seed.ts",
+    "clear": "ts-node temp/clear.ts"
   },
   "author": "",
   "license": "ISC",
