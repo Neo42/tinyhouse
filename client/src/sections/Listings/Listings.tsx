@@ -9,7 +9,7 @@ import {
 import './styles/Listings.css'
 
 const LISTINGS = gql`
-  # query naming is required for codegen
+  # query naming is required for apollo codegen
   query Listings {
     listings {
       id
