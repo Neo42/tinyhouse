@@ -1,4 +1,5 @@
 import React from 'react'
+import {Navigate} from 'react-router-dom'
 import {useApolloClient, useMutation} from '@apollo/client'
 import {Card, Layout, Spin, Typography} from 'antd'
 import {AUTH_URL} from 'lib/graphql/queries'
@@ -12,7 +13,6 @@ import {Viewer} from 'lib/types'
 import googleLogo from './assets/google_logo.jpeg'
 import {displayErrorMessage, displaySuccessNotification} from 'lib/utils'
 import {ErrorBanner} from 'lib/components'
-import {Navigate, useNavigate} from 'react-router-dom'
 
 interface Props {
   setViewer: (viewer: Viewer) => void
@@ -22,7 +22,6 @@ const {Content} = Layout
 const {Text, Title} = Typography
 
 export const Login = ({setViewer}: Props) => {
-  const navigate = useNavigate()
   const client = useApolloClient()
   const [logIn, {data: LogInData, loading: logInLoading, error: logInError}] =
     useMutation<LogInData, LogInVariables>(LOG_IN, {
@@ -72,7 +71,7 @@ export const Login = ({setViewer}: Props) => {
 
   if (LogInData && LogInData.logIn) {
     const {id: viewerId} = LogInData.logIn
-    return <Navigate to={`/user/${viewerId}`} />
+    return <Navigate to={`/user/${viewerId}`} replace />
   }
 
   const logInErrorBannerElement = logInError ? (
