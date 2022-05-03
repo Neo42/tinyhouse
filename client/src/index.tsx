@@ -1,8 +1,9 @@
 import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client'
+import {Layout} from 'antd'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import {Home, Host, Listing, Listings, NotFound, User} from 'sections'
+import {Home, Host, Listing, Listings, Login, NotFound, User} from 'sections'
 import 'styles/index.css'
 
 const client = new ApolloClient({
@@ -12,15 +13,18 @@ const client = new ApolloClient({
 
 const App = () => (
   <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/host" element={<Host />} />
-      <Route path="/listing/:id" element={<Listing />} />
-      <Route path="/listings" element={<Listings />} />
-      <Route path="/listings/:location" element={<Listings />} />
-      <Route path="/user/:id" element={<User />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <Layout id="app">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/host" element={<Host />} />
+        <Route path="/listing/:id" element={<Listing />} />
+        <Route path="/listings" element={<Listings />} />
+        <Route path="/listings/:location" element={<Listings />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/user/:id" element={<User />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Layout>
   </BrowserRouter>
 )
 
