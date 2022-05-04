@@ -2,9 +2,8 @@ import {Avatar, Button, Menu} from 'antd'
 import {HomeOutlined, LogoutOutlined, UserOutlined} from '@ant-design/icons'
 import {Link, useNavigate} from 'react-router-dom'
 import {useMutation} from '@apollo/client'
+import {LOG_OUT, LogOut as LogOutData} from 'lib/graphql/mutations'
 import {Viewer} from 'lib/types'
-import {LogOut as LogOutData} from 'lib/graphql/mutations/LogOut/__generated__/LogOut'
-import {LOG_OUT} from 'lib/graphql/mutations'
 import {displayErrorMessage, displaySuccessNotification} from 'lib/utils'
 
 const {Item, SubMenu} = Menu

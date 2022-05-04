@@ -2,17 +2,17 @@ import React from 'react'
 import {Navigate} from 'react-router-dom'
 import {useApolloClient, useMutation} from '@apollo/client'
 import {Card, Layout, Spin, Typography} from 'antd'
-import {AUTH_URL} from 'lib/graphql/queries'
-import {LOG_IN} from 'lib/graphql/mutations'
-import {AuthUrl as AuthUrlData} from 'lib/graphql/queries/AuthUrl/__generated__/AuthUrl'
-import {
-  LogIn as LogInData,
-  LogInVariables,
-} from 'lib/graphql/mutations/LogIn/__generated__/LogIn'
-import {Viewer} from 'lib/types'
-import googleLogo from './assets/google_logo.jpeg'
-import {displayErrorMessage, displaySuccessNotification} from 'lib/utils'
 import {ErrorBanner} from 'lib/components'
+import {
+  AUTH_URL,
+  LOG_IN,
+  LogInVariables,
+  AuthUrl as AuthUrlData,
+  LogIn as LogInData,
+} from 'lib/graphql'
+import {Viewer} from 'lib/types'
+import {displayErrorMessage, displaySuccessNotification} from 'lib/utils'
+import googleLogo from './assets/google_logo.jpeg'
 
 interface Props {
   setViewer: (viewer: Viewer) => void
