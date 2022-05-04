@@ -28,21 +28,25 @@ export const Login = ({setViewer}: Props) => {
     {data: LogInData, loading: logInLoading, error: logInError},
   ] = useMutation<LogInData, LogInVariables>(LOG_IN, {
     onCompleted: (data) => {
-      if (data && data.logIn) {
+      if (
+        data &&
+        data.logIn &&
+        data.logIn.token &&
+        !sessionStorage.getItem('token')
+      ) {
         setViewer(data.logIn)
+        sessionStorage.setItem('token', data.logIn.token)
         displaySuccessNotification("You've successfully logged in!")
       }
     },
   })
 
-  // const logInRef = React.useRef(logIn)
   const logIn = React.useCallback(logInCallback, [logInCallback])
 
   React.useEffect(() => {
     const code = new URL(window.location.href).searchParams.get('code')
 
     if (code) {
-      // logInRef.current
       logIn({
         variables: {
           input: {code},

@@ -3,14 +3,29 @@ import ReactDOM from 'react-dom/client'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import {Affix, Layout, Spin} from 'antd'
 import * as apollo from '@apollo/client'
+import {setContext} from '@apollo/client/link/context'
 import * as Sections from 'sections'
 import {Viewer} from 'lib/types'
 import {LOG_IN, LogIn as LogInData, LogInVariables} from 'lib/graphql/mutations'
 import {AppHeaderSkeleton, ErrorBanner} from 'lib/components'
 import 'styles/index.css'
 
-const client = new apollo.ApolloClient({
+const httpLink = apollo.createHttpLink({
   uri: '/api',
+})
+
+const authLink = setContext((_, {headers}) => {
+  const token = sessionStorage.getItem('token')
+  return {
+    headers: {
+      ...headers,
+      'X-CSRF-TOKEN': token || '',
+    },
+  }
+})
+
+const client = new apollo.ApolloClient({
+  link: authLink.concat(httpLink),
   cache: new apollo.InMemoryCache(),
 })
 
@@ -31,6 +46,12 @@ const App = () => {
     onCompleted: (data) => {
       if (data && data.logIn) {
         setViewer(data.logIn)
+
+        if (data.logIn.token) {
+          sessionStorage.setItem('token', data.logIn.token)
+        } else {
+          sessionStorage.removeItem('token')
+        }
       }
     },
   })
