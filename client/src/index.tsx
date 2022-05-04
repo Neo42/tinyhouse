@@ -1,16 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client'
-import {Affix, Layout} from 'antd'
-import {AppHeader} from 'lib/components'
+import {Affix, Layout, Spin} from 'antd'
+import * as apollo from '@apollo/client'
+import * as Sections from 'sections'
 import {Viewer} from 'lib/types'
-import {Home, Host, Listing, Listings, Login, NotFound, User} from 'sections'
+import {LOG_IN, LogIn as LogInData, LogInVariables} from 'lib/graphql/mutations'
+import {AppHeaderSkeleton, ErrorBanner} from 'lib/components'
 import 'styles/index.css'
 
-const client = new ApolloClient({
+const client = new apollo.ApolloClient({
   uri: '/api',
-  cache: new InMemoryCache(),
+  cache: new apollo.InMemoryCache(),
 })
 
 const initialViewer: Viewer = {
@@ -23,22 +24,57 @@ const initialViewer: Viewer = {
 
 const App = () => {
   const [viewer, setViewer] = React.useState<Viewer>(initialViewer)
+  const [logInCallback, {error}] = apollo.useMutation<
+    LogInData,
+    LogInVariables
+  >(LOG_IN, {
+    onCompleted: (data) => {
+      if (data && data.logIn) {
+        setViewer(data.logIn)
+      }
+    },
+  })
+
+  const logIn = React.useCallback(logInCallback, [logInCallback])
+
+  React.useEffect(() => {
+    logIn()
+  }, [logIn])
+
+  if (!viewer.didRequest && !error) {
+    return (
+      <Layout className="app-skeleton">
+        <AppHeaderSkeleton />
+        <div className="app-skeleton__spin-section">
+          <Spin size="large" tip="Launching TinyHouse" />
+        </div>
+      </Layout>
+    )
+  }
+
+  const logInErrorBannerElement = error ? (
+    <ErrorBanner description="We weren't able to verify if you were logged in. Please try again later!" />
+  ) : null
 
   return (
     <BrowserRouter>
       <Layout id="app">
+        {logInErrorBannerElement}
         <Affix offsetTop={0} className="app__affix-header">
-          <AppHeader viewer={viewer} setViewer={setViewer} />
+          <Sections.AppHeader viewer={viewer} setViewer={setViewer} />
         </Affix>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/host" element={<Host />} />
-          <Route path="/listing/:id" element={<Listing />} />
-          <Route path="/listings" element={<Listings />} />
-          <Route path="/listings/:location" element={<Listings />} />
-          <Route path="/login" element={<Login setViewer={setViewer} />} />
-          <Route path="/user/:id" element={<User />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/" element={<Sections.Home />} />
+          <Route path="/host" element={<Sections.Host />} />
+          <Route path="/listing/:id" element={<Sections.Listing />} />
+          <Route path="/listings" element={<Sections.Listings />} />
+          <Route path="/listings/:location" element={<Sections.Listings />} />
+          <Route
+            path="/login"
+            element={<Sections.Login setViewer={setViewer} />}
+          />
+          <Route path="/user/:id" element={<Sections.User />} />
+          <Route path="*" element={<Sections.NotFound />} />
         </Routes>
       </Layout>
     </BrowserRouter>
@@ -48,9 +84,9 @@ const App = () => {
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
+    <apollo.ApolloProvider client={client}>
       <App />
-    </ApolloProvider>
+    </apollo.ApolloProvider>
   </React.StrictMode>,
 )
 

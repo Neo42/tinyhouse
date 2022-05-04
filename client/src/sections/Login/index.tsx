@@ -23,29 +23,33 @@ const {Text, Title} = Typography
 
 export const Login = ({setViewer}: Props) => {
   const client = useApolloClient()
-  const [logIn, {data: LogInData, loading: logInLoading, error: logInError}] =
-    useMutation<LogInData, LogInVariables>(LOG_IN, {
-      onCompleted: (data) => {
-        if (data && data.logIn) {
-          setViewer(data.logIn)
-          displaySuccessNotification("You've successfully logged in!")
-        }
-      },
-    })
+  const [
+    logInCallback,
+    {data: LogInData, loading: logInLoading, error: logInError},
+  ] = useMutation<LogInData, LogInVariables>(LOG_IN, {
+    onCompleted: (data) => {
+      if (data && data.logIn) {
+        setViewer(data.logIn)
+        displaySuccessNotification("You've successfully logged in!")
+      }
+    },
+  })
 
-  const logInRef = React.useRef(logIn)
+  // const logInRef = React.useRef(logIn)
+  const logIn = React.useCallback(logInCallback, [logInCallback])
 
   React.useEffect(() => {
     const code = new URL(window.location.href).searchParams.get('code')
 
     if (code) {
-      logInRef.current({
+      // logInRef.current
+      logIn({
         variables: {
           input: {code},
         },
       })
     }
-  }, [])
+  }, [logIn])
 
   const handleAuthorize = async () => {
     try {
@@ -71,7 +75,7 @@ export const Login = ({setViewer}: Props) => {
 
   if (LogInData && LogInData.logIn) {
     const {id: viewerId} = LogInData.logIn
-    return <Navigate to={`/user/${viewerId}`} replace />
+    return <Navigate to={`/user/${viewerId}`} />
   }
 
   const logInErrorBannerElement = logInError ? (

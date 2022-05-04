@@ -1,7 +1,7 @@
 import {Layout} from 'antd'
 import {Link} from 'react-router-dom'
 import logo from './assets/tinyhouse-logo.png'
-import {MenuItems} from './components/MenuItems/index'
+import {MenuItems} from './components/MenuItems'
 import {Viewer} from 'lib/types'
 
 const {Header} = Layout
