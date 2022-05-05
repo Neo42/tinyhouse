@@ -6,7 +6,7 @@ import * as apollo from '@apollo/client'
 import {setContext} from '@apollo/client/link/context'
 import * as Sections from 'sections'
 import {Viewer} from 'lib/types'
-import {LOG_IN, LogIn as LogInData, LogInVariables} from 'lib/graphql/mutations'
+import {LOG_IN, LogIn as LogInData, LogInVariables} from 'lib/graphql'
 import {AppHeaderSkeleton, ErrorBanner} from 'lib/components'
 import 'styles/index.css'
 
@@ -94,7 +94,7 @@ const App = () => {
             path="/login"
             element={<Sections.Login setViewer={setViewer} />}
           />
-          <Route path="/user/:id" element={<Sections.User />} />
+          <Route path="/user/:id" element={<Sections.User viewer={viewer} />} />
           <Route path="*" element={<Sections.NotFound />} />
         </Routes>
       </Layout>

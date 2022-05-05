@@ -2,7 +2,7 @@ import {Avatar, Button, Menu} from 'antd'
 import {HomeOutlined, LogoutOutlined, UserOutlined} from '@ant-design/icons'
 import {Link, useNavigate} from 'react-router-dom'
 import {useMutation} from '@apollo/client'
-import {LOG_OUT, LogOut as LogOutData} from 'lib/graphql/mutations'
+import {LOG_OUT, LogOut as LogOutData} from 'lib/graphql'
 import {Viewer} from 'lib/types'
 import {displayErrorMessage, displaySuccessNotification} from 'lib/utils'
 
